@@ -34,14 +34,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01D0474C2AC1A3AC006302CE /* BCS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		01D0474C2AC1A3AC006302CE /* Athlete’s Intellectual Routines.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Athlete’s Intellectual Routines.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D0474F2AC1A3AC006302CE /* AIRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRApp.swift; sourceTree = "<group>"; };
 		01D047512AC1A3AC006302CE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		01D047532AC1A3AE006302CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01D047562AC1A3AE006302CE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		01D0475C2AC1A3AE006302CE /* BCSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BCSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		01D0475C2AC1A3AE006302CE /* Athlete’s Intellectual RoutinesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Athlete’s Intellectual RoutinesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D047602AC1A3AE006302CE /* AIRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRTests.swift; sourceTree = "<group>"; };
-		01D047662AC1A3AE006302CE /* BCSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BCSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		01D047662AC1A3AE006302CE /* Athlete’s Intellectual RoutinesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Athlete’s Intellectual RoutinesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D0476A2AC1A3AE006302CE /* AIRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRUITests.swift; sourceTree = "<group>"; };
 		01D0476C2AC1A3AE006302CE /* AIRUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,9 +84,9 @@
 		01D0474D2AC1A3AC006302CE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				01D0474C2AC1A3AC006302CE /* BCS.app */,
-				01D0475C2AC1A3AE006302CE /* BCSTests.xctest */,
-				01D047662AC1A3AE006302CE /* BCSUITests.xctest */,
+				01D0474C2AC1A3AC006302CE /* Athlete’s Intellectual Routines.app */,
+				01D0475C2AC1A3AE006302CE /* Athlete’s Intellectual RoutinesTests.xctest */,
+				01D047662AC1A3AE006302CE /* Athlete’s Intellectual RoutinesUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,9 +130,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		01D0474B2AC1A3AC006302CE /* BCS */ = {
+		01D0474B2AC1A3AC006302CE /* Athlete’s Intellectual Routines */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01D047702AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "BCS" */;
+			buildConfigurationList = 01D047702AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "Athlete’s Intellectual Routines" */;
 			buildPhases = (
 				01D047482AC1A3AC006302CE /* Sources */,
 				01D047492AC1A3AC006302CE /* Frameworks */,
@@ -142,14 +142,14 @@
 			);
 			dependencies = (
 			);
-			name = BCS;
+			name = "Athlete’s Intellectual Routines";
 			productName = AIR;
-			productReference = 01D0474C2AC1A3AC006302CE /* BCS.app */;
+			productReference = 01D0474C2AC1A3AC006302CE /* Athlete’s Intellectual Routines.app */;
 			productType = "com.apple.product-type.application";
 		};
-		01D0475B2AC1A3AE006302CE /* BCSTests */ = {
+		01D0475B2AC1A3AE006302CE /* Athlete’s Intellectual RoutinesTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01D047732AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "BCSTests" */;
+			buildConfigurationList = 01D047732AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "Athlete’s Intellectual RoutinesTests" */;
 			buildPhases = (
 				01D047582AC1A3AE006302CE /* Sources */,
 				01D047592AC1A3AE006302CE /* Frameworks */,
@@ -160,14 +160,14 @@
 			dependencies = (
 				01D0475E2AC1A3AE006302CE /* PBXTargetDependency */,
 			);
-			name = BCSTests;
+			name = "Athlete’s Intellectual RoutinesTests";
 			productName = AIRTests;
-			productReference = 01D0475C2AC1A3AE006302CE /* BCSTests.xctest */;
+			productReference = 01D0475C2AC1A3AE006302CE /* Athlete’s Intellectual RoutinesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		01D047652AC1A3AE006302CE /* BCSUITests */ = {
+		01D047652AC1A3AE006302CE /* Athlete’s Intellectual RoutinesUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01D047762AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "BCSUITests" */;
+			buildConfigurationList = 01D047762AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "Athlete’s Intellectual RoutinesUITests" */;
 			buildPhases = (
 				01D047622AC1A3AE006302CE /* Sources */,
 				01D047632AC1A3AE006302CE /* Frameworks */,
@@ -178,9 +178,9 @@
 			dependencies = (
 				01D047682AC1A3AE006302CE /* PBXTargetDependency */,
 			);
-			name = BCSUITests;
+			name = "Athlete’s Intellectual RoutinesUITests";
 			productName = AIRUITests;
-			productReference = 01D047662AC1A3AE006302CE /* BCSUITests.xctest */;
+			productReference = 01D047662AC1A3AE006302CE /* Athlete’s Intellectual RoutinesUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -206,7 +206,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 01D047472AC1A3AC006302CE /* Build configuration list for PBXProject "BCS" */;
+			buildConfigurationList = 01D047472AC1A3AC006302CE /* Build configuration list for PBXProject "Athlete’s Intellectual Routines" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -219,9 +219,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				01D0474B2AC1A3AC006302CE /* BCS */,
-				01D0475B2AC1A3AE006302CE /* BCSTests */,
-				01D047652AC1A3AE006302CE /* BCSUITests */,
+				01D0474B2AC1A3AC006302CE /* Athlete’s Intellectual Routines */,
+				01D0475B2AC1A3AE006302CE /* Athlete’s Intellectual RoutinesTests */,
+				01D047652AC1A3AE006302CE /* Athlete’s Intellectual RoutinesUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -284,12 +284,12 @@
 /* Begin PBXTargetDependency section */
 		01D0475E2AC1A3AE006302CE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 01D0474B2AC1A3AC006302CE /* BCS */;
+			target = 01D0474B2AC1A3AC006302CE /* Athlete’s Intellectual Routines */;
 			targetProxy = 01D0475D2AC1A3AE006302CE /* PBXContainerItemProxy */;
 		};
 		01D047682AC1A3AE006302CE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 01D0474B2AC1A3AC006302CE /* BCS */;
+			target = 01D0474B2AC1A3AC006302CE /* Athlete’s Intellectual Routines */;
 			targetProxy = 01D047672AC1A3AE006302CE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -483,7 +483,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BCS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BCS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Athlete’s Intellectual Routines.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Athlete’s Intellectual Routines";
 			};
 			name = Debug;
 		};
@@ -503,7 +503,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BCS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BCS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Athlete’s Intellectual Routines.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Athlete’s Intellectual Routines";
 			};
 			name = Release;
 		};
@@ -546,7 +546,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		01D047472AC1A3AC006302CE /* Build configuration list for PBXProject "BCS" */ = {
+		01D047472AC1A3AC006302CE /* Build configuration list for PBXProject "Athlete’s Intellectual Routines" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01D0476E2AC1A3AE006302CE /* Debug */,
@@ -555,7 +555,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01D047702AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "BCS" */ = {
+		01D047702AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "Athlete’s Intellectual Routines" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01D047712AC1A3AE006302CE /* Debug */,
@@ -564,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01D047732AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "BCSTests" */ = {
+		01D047732AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "Athlete’s Intellectual RoutinesTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01D047742AC1A3AE006302CE /* Debug */,
@@ -573,7 +573,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01D047762AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "BCSUITests" */ = {
+		01D047762AC1A3AE006302CE /* Build configuration list for PBXNativeTarget "Athlete’s Intellectual RoutinesUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01D047772AC1A3AE006302CE /* Debug */,
