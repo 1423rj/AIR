@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import AIR
+
 
 final class AIRTests: XCTestCase {
 
