@@ -28,6 +28,7 @@ struct ContentView: View {
                         Image(systemName: "chart.bar.fill")
                         Text("Progress")
                     }
+                
             }
             .navigationBarTitle("AIR", displayMode: .large)
         }
