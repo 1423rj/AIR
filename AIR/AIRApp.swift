@@ -127,9 +127,13 @@ struct ProgressView: View {
     @State private var currentDay: Int = 1
     @State private var setsCompleted: Int = 0
     
+    @State private var currentOneRM: Double
     init(oneRM: Double, workout: Workout? = nil) {
+        _currentOneRM = State(initialValue: oneRM)
+        
         // If workout is not nil, update the State variables
         if let workout = workout {
+            _currentOneRM = State(initialValue: workout.oneRM)
             _workout = State(initialValue: workout)
             _workoutName = State(initialValue: workout.id)
             _currentWeek = State(initialValue: workout.currentWeek)
@@ -155,7 +159,7 @@ struct ProgressView: View {
             if currentDay >= 1 && currentDay <= totalSets.count {
                 Text("Sets Completed: \(setsCompleted) / \(totalSets[currentDay - 1])")
                 
-                Text("Weight: \(String(format: "%.1f", ceilToNearest(value: settings.oneRM * (percentages[currentDay - 1] + Double(5 * (currentWeek - 1))/100), nearest: 2.5))) kg")
+                Text("Weight: \(String(format: "%.1f", ceilToNearest(value: currentOneRM * (percentages[currentDay - 1] + Double(5 * (currentWeek - 1))/100), nearest: 2.5))) kg")
                     .font(.headline)
                 
                 Button(action: {
@@ -176,7 +180,7 @@ struct ProgressView: View {
                         }
                         
                         // Update workout after change
-                        self.workout = Workout(id: self.workoutName, oneRM: settings.oneRM, currentWeek: self.currentWeek, currentDay: self.currentDay, setsCompleted: self.setsCompleted)
+                        self.workout = Workout(id: self.workoutName, oneRM: currentOneRM, currentWeek: self.currentWeek, currentDay: self.currentDay, setsCompleted: self.setsCompleted)
                         
                     }) {
                     Text("Complete Set")
@@ -258,7 +262,8 @@ struct ProgressView: View {
             }
             
             let currentWorkoutId = workout?.id ?? UUID().uuidString
-            let currentWorkout = Workout(id: currentWorkoutId, oneRM: settings.oneRM, currentWeek: currentWeek, currentDay: currentDay, setsCompleted: setsCompleted)
+            let currentWorkout = Workout(id: currentWorkoutId, oneRM: currentOneRM, currentWeek: currentWeek, currentDay: currentDay, setsCompleted: setsCompleted)
+                //...
             
             if let index = existingWorkouts.firstIndex(where: { $0.id == currentWorkoutId }) {
                 existingWorkouts[index] = currentWorkout
@@ -275,6 +280,7 @@ struct ProgressView: View {
             print("Error saving workout: \(error)")
         }
     }
+
 }
     
     
