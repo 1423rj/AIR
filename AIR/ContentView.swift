@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var settings: UserSettings
     var body: some View {
         NavigationView {
             TabView {
@@ -23,7 +24,7 @@ struct ContentView: View {
                         Text("Program")
                     }
                 
-                ProgressView()
+                ProgressView(oneRM: settings.oneRM)
                     .tabItem {
                         Image(systemName: "chart.bar.fill")
                         Text("Progress")
@@ -40,5 +41,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(UserSettings())
     }
 }

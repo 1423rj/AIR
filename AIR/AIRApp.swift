@@ -9,12 +9,15 @@ import SwiftUI
 
 @main
 struct AIRApp: App {
+    @StateObject private var settings = UserSettings()
+    
     init() {
         UserDefaults.standard.register(defaults: ["oneRM": 100.0])
     }
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(settings)
         }
     }
 }
@@ -27,6 +30,10 @@ struct Workout: Identifiable, Codable {
     var currentWeek: Int
     var currentDay: Int
     var setsCompleted: Int
+}
+
+class UserSettings: ObservableObject {
+    @Published var oneRM: Double = 100.0
 }
 
 
@@ -107,28 +114,28 @@ struct HomePageView: View {
 
 
 struct ProgressView: View {
+    @EnvironmentObject var settings: UserSettings
     @AppStorage("savedWorkouts") var savedWorkouts: Data = Data()
     @State private var workout: Workout?
     
     
-    
-    
     // Initialize state variables based on the workout object
     @State private var workoutName: String = ""
-    @State private var oneRM: Double = 100.0
+  
     @State private var currentWeek: Int = 1
     @State private var currentDay: Int = 1
     @State private var setsCompleted: Int = 0
     
-    init(workout: Workout? = nil) {
+    init(oneRM: Double, workout: Workout? = nil) {
         // If workout is not nil, update the State variables
         if let workout = workout {
             _workout = State(initialValue: workout)
             _workoutName = State(initialValue: workout.id)
-            _oneRM = State(initialValue: workout.oneRM)
             _currentWeek = State(initialValue: workout.currentWeek)
             _currentDay = State(initialValue: workout.currentDay)
             _setsCompleted = State(initialValue: workout.setsCompleted)
+        } else {
+            _workoutName = State(initialValue: "") // Initialize with a unique ID
         }
     }
     var totalSets: [Int] = [6, 7, 8, 10]
@@ -147,7 +154,7 @@ struct ProgressView: View {
             if currentDay >= 1 && currentDay <= totalSets.count {
                 Text("Sets Completed: \(setsCompleted) / \(totalSets[currentDay - 1])")
                 
-                Text("Weight: \(String(format: "%.1f", ceilToNearest(value: oneRM * (percentages[currentDay - 1] + Double(5 * (currentWeek - 1))/100), nearest: 2.5))) kg")
+                Text("Weight: \(String(format: "%.1f", ceilToNearest(value: settings.oneRM * (percentages[currentDay - 1] + Double(5 * (currentWeek - 1))/100), nearest: 2.5))) kg")
                     .font(.headline)
                 
                 Button(action: {
@@ -168,7 +175,7 @@ struct ProgressView: View {
                         }
                         
                         // Update workout after change
-                        self.workout = Workout(id: self.workoutName, oneRM: self.oneRM, currentWeek: self.currentWeek, currentDay: self.currentDay, setsCompleted: self.setsCompleted)
+                        self.workout = Workout(id: self.workoutName, oneRM: settings.oneRM, currentWeek: self.currentWeek, currentDay: self.currentDay, setsCompleted: self.setsCompleted)
                         
                     }) {
                     Text("Complete Set")
@@ -183,28 +190,42 @@ struct ProgressView: View {
             
             Spacer()  // Push the button to the bottom
             
-            Button(action: {
-                self.currentDay = 1
-                self.currentWeek = 1
-                self.setsCompleted = 0
-            }) {
-                Text("Reset")
-                    .padding()
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
+            
             TextField("Enter Workout Name", text: $workoutName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
-            Button(action: saveWorkout) {
-                Text("Save Workout")
-                    .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                .padding(.horizontal)
+
+            HStack(spacing: 10) {  // Add spacing between the buttons
+                Button(action: {
+                    self.currentDay = 1
+                    self.currentWeek = 1
+                    self.setsCompleted = 0
+                }) {
+                    Text("Reset")
+                        .frame(maxWidth: .infinity) // Make the button take as much space as possible
+                        .padding()
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+
+                Button(action: {
+                    if !workoutName.isEmpty {
+                        saveWorkout()
+                    }
+                }) {
+                    Text("Save Workout")
+                        .frame(maxWidth: .infinity) // Make the button take as much space as possible
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
+            .padding(.horizontal) // Add horizontal padding to the HStack
             
             
             .padding()
@@ -214,34 +235,44 @@ struct ProgressView: View {
         
         
         
-        .onDisappear {
-            saveWorkout()
+        .onChange(of: currentDay) { newValue in
+            if !workoutName.isEmpty {
+                    saveWorkout()
+                }
         }
+            
+        
     }
     
     func saveWorkout() {
-            do {
-                var existingWorkouts = [Workout]()
-                if let decodedWorkouts = try? JSONDecoder().decode([Workout].self, from: savedWorkouts) {
-                    existingWorkouts = decodedWorkouts
-                }
-                
-                let currentWorkout = workout ?? Workout(id: workoutName, oneRM: oneRM, currentWeek: currentWeek, currentDay: currentDay, setsCompleted: setsCompleted)
-                
-                if let index = existingWorkouts.firstIndex(where: { $0.id == currentWorkout.id }) {
-                    existingWorkouts[index] = currentWorkout
-                } else {
-                    existingWorkouts.append(currentWorkout)
-                }
-                
-                // Update workout state after saving
-                self.workout = currentWorkout
-                
-                let encodedWorkouts = try JSONEncoder().encode(existingWorkouts)
-                self.savedWorkouts = encodedWorkouts
-            } catch {
-                print("Error saving workout: \(error)")
+        guard !workoutName.trimmingCharacters(in: .whitespaces).isEmpty else {
+            // Prompt user to enter a workout name
+            return
+        }
+
+        do {
+            var existingWorkouts = [Workout]()
+            if let decodedWorkouts = try? JSONDecoder().decode([Workout].self, from: savedWorkouts) {
+                existingWorkouts = decodedWorkouts
             }
+            
+            let currentWorkoutId = workout?.id ?? UUID().uuidString
+            let currentWorkout = Workout(id: currentWorkoutId, oneRM: settings.oneRM, currentWeek: currentWeek, currentDay: currentDay, setsCompleted: setsCompleted)
+            
+            if let index = existingWorkouts.firstIndex(where: { $0.id == currentWorkoutId }) {
+                existingWorkouts[index] = currentWorkout
+            } else {
+                existingWorkouts.append(currentWorkout)
+            }
+            
+            // Update workout state after saving
+            self.workout = currentWorkout
+            
+            let encodedWorkouts = try JSONEncoder().encode(existingWorkouts)
+            self.savedWorkouts = encodedWorkouts
+        } catch {
+            print("Error saving workout: \(error)")
+        }
     }
 }
     
@@ -251,15 +282,16 @@ struct ProgressView: View {
     
     
     struct ProgressView_Previews: PreviewProvider {
+        @EnvironmentObject var settings: UserSettings
         @State static var previewOneRM: Double = 100.0
         
         static var previews: some View {
-            ProgressView()
+            ProgressView(oneRM: previewOneRM)
         }
     }
     
     struct ProgramView: View {
-        @AppStorage("oneRM") var oneRM: Double = 100.0
+        @EnvironmentObject var settings: UserSettings
         @AppStorage("currentWeek") var currentWeek: Int = 1
         let percentages: [Double] = [0.7, 0.75, 0.8, 0.85]
         
@@ -273,7 +305,7 @@ struct ProgressView: View {
                     Text("Enter your 1RM:")
                         .font(.headline)
                     
-                    TextField("Weight", value: $oneRM, format: .number)
+                    TextField("Weight", value: $settings.oneRM, format: .number)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
@@ -292,7 +324,7 @@ struct ProgressView: View {
                                     
                                     Spacer()
                                     
-                                    Text("\(String(format: "%.1f", self.ceilToNearest(value: oneRM * (percentage + Double(5 * (week - 1))/100), nearest: 2.5))) kg")
+                                    Text("\(String(format: "%.1f", self.ceilToNearest(value: settings.oneRM * (percentage + Double(5 * (week - 1))/100), nearest: 2.5))) kg")
                                         .fontWeight(.semibold)
                                 }
                             }
@@ -302,7 +334,7 @@ struct ProgressView: View {
                         .cornerRadius(10)
                     }
                     
-                    NavigationLink(destination: ProgressView()) {
+                    NavigationLink(destination: ProgressView(oneRM: settings.oneRM)) {
                         Text("Start Workout")
                             .padding()
                             .background(Color.blue)
@@ -405,39 +437,49 @@ struct ProgressView: View {
     
     
 struct SavedWorkoutsView: View {
-    @AppStorage("savedWorkouts") var savedWorkouts: Data = Data()
+    @EnvironmentObject var settings: UserSettings
+    @AppStorage("savedWorkouts") var savedWorkoutsData: Data = Data()
+    @State private var savedWorkouts: [Workout] = []
     @State private var selectedWorkout: Workout?
     @State private var isActive: Bool = false
 
     var body: some View {
         List {
-            if var savedWorkoutsArray = try? JSONDecoder().decode([Workout].self, from: savedWorkouts) {
-                ForEach(savedWorkoutsArray, id: \.id) { workout in
-                    Button(action: {
-                        self.selectedWorkout = workout
-                        self.isActive = true
-                    }) {
-                        Text(workout.id)
-                    }
-                }
-                .onDelete { indexSet in
-                    indexSet.forEach { index in
-                        savedWorkoutsArray.remove(at: index)
-                    }
-                    let updatedWorkoutsData = try? JSONEncoder().encode(savedWorkoutsArray)
-                    savedWorkouts = updatedWorkoutsData ?? Data()
+            ForEach(savedWorkouts, id: \.id) { workout in
+                Button(action: {
+                    self.selectedWorkout = workout
+                    self.isActive = true
+                }) {
+                    Text(workout.id)
                 }
             }
+            .onDelete(perform: deleteWorkout)
         }
-            .navigationTitle("Saved Workouts")
-            .navigationBarItems(trailing: EditButton()) // Adds an Edit button to enable deletion
-            .background(
-                NavigationLink("", destination: ProgressView(workout: selectedWorkout)
-                    .onDisappear { self.isActive = false }, isActive: $isActive)
-                    .opacity(0) // Hide the NavigationLink
-            )
+        .navigationTitle("Saved Workouts")
+        .navigationBarItems(trailing: EditButton()) // Adds an Edit button to enable deletion
+        .background(
+            NavigationLink("", destination: ProgressView(oneRM: settings.oneRM, workout: selectedWorkout)
+                .onDisappear { self.isActive = false }, isActive: $isActive)
+                .opacity(0) // Hide the NavigationLink
+        )
+        .onAppear {
+            decodeSavedWorkouts()
         }
+    }
     
+    func decodeSavedWorkouts() {
+        if let decodedWorkouts = try? JSONDecoder().decode([Workout].self, from: savedWorkoutsData) {
+            savedWorkouts = decodedWorkouts
+        }
+    }
+    
+    func deleteWorkout(at offsets: IndexSet) {
+        offsets.forEach { index in
+            savedWorkouts.remove(at: index)
+        }
+        let updatedWorkoutsData = try? JSONEncoder().encode(savedWorkouts)
+        savedWorkoutsData = updatedWorkoutsData ?? Data()
+    }
 }
 
 
