@@ -42,6 +42,7 @@ struct HomePageView: View {
     @State private var selectedTab = 0
     let exerciseImage = Image("b")
     let programImage = Image("Jackedguy")
+    let WorkoutsImage = Image("BrowseWorkout")
     var body: some View {
         TabView(selection: $selectedTab) {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
@@ -88,7 +89,7 @@ struct HomePageView: View {
                     destination: SavedWorkoutsView(),
                     label: {
                         ZStack {
-                            programImage
+                            WorkoutsImage
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                             Text("Browse Workouts")
