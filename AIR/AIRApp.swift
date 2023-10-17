@@ -157,26 +157,29 @@ struct ProgressView: View {
                 .font(.headline)
             
             if currentDay >= 1 && currentDay <= totalSets.count {
+               
                 Text("Sets Completed: \(setsCompleted) / \(totalSets[currentDay - 1])")
-                
-                Text("Weight: \(String(format: "%.1f", ceilToNearest(value: currentOneRM * (percentages[currentDay - 1] + Double(5 * (currentWeek - 1))/100), nearest: 2.5))) kg")
-                    .font(.headline)
-                
-                Button(action: {
-                        if setsCompleted < totalSets[currentDay - 1] {
-                            setsCompleted += 1
-                        } else {
-                            setsCompleted = 0
-                            if currentDay < 4 {
-                                currentDay += 1
-                            } else {
-                                currentDay = 1
-                                if currentWeek < 4 {
-                                    currentWeek += 1
+
+                            let baseWeight = ceilToNearest(value: currentOneRM * percentages[currentDay - 1], nearest: 2.5)
+                            let adjustedWeight = baseWeight + Double(currentWeek - 1) * 5.0
+                            Text("Weight: \(String(format: "%.1f", adjustedWeight)) kg")
+                                .font(.headline)
+
+                            Button(action: {
+                                if setsCompleted + 1 < totalSets[currentDay - 1] {
+                                    setsCompleted += 1
                                 } else {
-                                    currentWeek = 1
-                                }
-                            }
+                                    setsCompleted = 0
+                                    if currentDay < 4 {
+                                        currentDay += 1
+                                    } else {
+                                        currentDay = 1
+                                        if currentWeek < 4 {
+                                            currentWeek += 1
+                                        } else {
+                                            currentWeek = 1
+                                        }
+                                    }
                         }
                         
                         // Update workout after change
@@ -240,7 +243,7 @@ struct ProgressView: View {
         
         
         
-        .onChange(of: currentDay) { newValue in
+        .onChange(of: setsCompleted) { newValue in
             if !workoutName.isEmpty {
                     saveWorkout()
                 }
@@ -254,31 +257,36 @@ struct ProgressView: View {
             // Prompt user to enter a workout name
             return
         }
-
-        do {
-            var existingWorkouts = [Workout]()
-            if let decodedWorkouts = try? JSONDecoder().decode([Workout].self, from: savedWorkouts) {
-                existingWorkouts = decodedWorkouts
-            }
-            
-            let currentWorkoutId = workout?.id ?? UUID().uuidString
-            let currentWorkout = Workout(id: currentWorkoutId, oneRM: currentOneRM, currentWeek: currentWeek, currentDay: currentDay, setsCompleted: setsCompleted)
-                //...
-            
-            if let index = existingWorkouts.firstIndex(where: { $0.id == currentWorkoutId }) {
-                existingWorkouts[index] = currentWorkout
-            } else {
-                existingWorkouts.append(currentWorkout)
-            }
-            
-            // Update workout state after saving
-            self.workout = currentWorkout
-            
-            let encodedWorkouts = try JSONEncoder().encode(existingWorkouts)
-            self.savedWorkouts = encodedWorkouts
-        } catch {
-            print("Error saving workout: \(error)")
+        if (setsCompleted == 0 && currentDay == 1){
+            return
         }
+        else{
+            do {
+                var existingWorkouts = [Workout]()
+                if let decodedWorkouts = try? JSONDecoder().decode([Workout].self, from: savedWorkouts) {
+                    existingWorkouts = decodedWorkouts
+                }
+                
+                let currentWorkoutId = workout?.id ?? UUID().uuidString
+                let currentWorkout = Workout(id: currentWorkoutId, oneRM: currentOneRM, currentWeek: currentWeek, currentDay: currentDay, setsCompleted: setsCompleted)
+                    //...
+                
+                if let index = existingWorkouts.firstIndex(where: { $0.id == currentWorkoutId }) {
+                    existingWorkouts[index] = currentWorkout
+                } else {
+                    existingWorkouts.append(currentWorkout)
+                }
+                
+                // Update workout state after saving
+                self.workout = currentWorkout
+                
+                let encodedWorkouts = try JSONEncoder().encode(existingWorkouts)
+                self.savedWorkouts = encodedWorkouts
+            } catch {
+                print("Error saving workout: \(error)")
+            }
+        }
+        
     }
 
 }
@@ -318,24 +326,27 @@ struct ProgressView: View {
                         .padding()
                     
                     Divider()
-                    
                     ForEach(1...4, id: \.self) { week in
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Week \(week)")
                                 .font(.headline)
-                            
+
                             ForEach(percentages, id: \.self) { percentage in
                                 HStack {
                                     Text("Set \(self.percentages.firstIndex(of: percentage)! + 1):")
                                         .fontWeight(.semibold)
-                                    
+
                                     Spacer()
-                                    
-                                    Text("\(String(format: "%.1f", self.ceilToNearest(value: settings.oneRM * (percentage + Double(5 * (week - 1))/100), nearest: 2.5))) kg")
+
+                                    let baseWeight = self.ceilToNearest(value: settings.oneRM * percentage, nearest: 2.5)
+                                    let adjustedWeight = baseWeight + Double(week - 1) * 5.0
+                                    Text("\(String(format: "%.1f", adjustedWeight)) kg")
                                         .fontWeight(.semibold)
                                 }
                             }
                         }
+                    
+
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(10)
